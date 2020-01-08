@@ -2,6 +2,8 @@
 name = "l8r"
 version = "0.1.1"
 description = "Lazy Update Scheduler for Hecs"
+homepage = "https://github.com/cedric-h/l8r"
+repository = "https://github.com/cedric-h/l8r"
 license = "MIT"
 authors = ["Cedric Hutchings <cedhut02@gmail.com>"]
 edition = "2018"
