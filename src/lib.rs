@@ -1,4 +1,7 @@
+extern crate alloc;
 pub struct L8r<W>(Vec<Box<dyn FnOnce(&mut W)>>);
+use alloc::vec::Drain;
+use core::{iter::Extend, ops::RangeBounds};
 #[derive(Default)]
 impl<W> L8r<W> {
     pub fn new() -> Self {
@@ -13,12 +16,18 @@ impl<W> L8r<W> {
         self.0.push(Box::new(then));
     }
 
-    pub fn drain(&mut self) -> Vec<Box<dyn FnOnce(&mut W)>> {
-        self.0.drain(..).collect::<Vec<_>>()
+    pub fn drain<R: RangeBounds<usize>>(
+        &mut self,
+        range: R,
+    ) -> Drain<Box<dyn FnOnce(&mut W) + Send + Sync>> {
+        self.0.drain(range)
     }
 
-    pub fn now(l8rs: Vec<Box<dyn FnOnce(&mut W)>>, world: &mut W) {
-        for l8r in l8rs.into_iter() {
+    pub fn now<I: IntoIterator<Item = Box<dyn FnOnce(&mut W) + Send + Sync>>>(
+        l8rs: I,
+        world: &mut W,
+    ) {
+        for l8r in l8rs {
             l8r(world);
         }
     }
