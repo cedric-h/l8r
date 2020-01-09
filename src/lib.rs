@@ -35,7 +35,8 @@ impl<W> L8r<W> {
     }
 }
 impl<W> L8r<W>
-where W: ContainsHecsWorld {
+where
+    W: ContainsHecsWorld,
     pub fn insert_one<C: hecs::Component>(&mut self, ent: hecs::Entity, component: C) {
         self.l8r(move |world| world.ecs_mut().insert_one(ent, component).unwrap())
     }
@@ -52,6 +53,7 @@ where W: ContainsHecsWorld {
         self.l8r(move |world| world.ecs_mut().insert(ent, components_bundle).unwrap())
     }
 
+    #[allow(clippy::drop_copy)]
     pub fn spawn<C: 'static + Send + Sync + hecs::DynamicBundle>(&mut self, components_bundle: C) {
         self.l8r(move |world| drop(world.ecs_mut().spawn(components_bundle)))
     }
