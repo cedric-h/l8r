@@ -1,18 +1,20 @@
 extern crate alloc;
-pub struct L8r<W>(Vec<Box<dyn FnOnce(&mut W)>>);
+
 use alloc::vec::Drain;
 use core::{iter::Extend, ops::RangeBounds};
+
 #[derive(Default)]
+pub struct L8r<W>(Vec<Box<dyn FnOnce(&mut W) + Send + Sync>>);
 impl<W> L8r<W> {
     pub fn new() -> Self {
         L8r(Vec::new())
     }
 
-    pub fn schedule(&mut self, then: Box<dyn FnOnce(&mut W)>) {
+    pub fn schedule(&mut self, then: Box<dyn FnOnce(&mut W) + Send + Sync>) {
         self.0.push(then);
     }
 
-    pub fn l8r<F: 'static + Send + Sync + FnOnce(&mut W)>(&mut self, then: F) {
+    pub fn l8r<F: 'static + Send + Sync + FnOnce(&mut W) + Send + Sync>(&mut self, then: F) {
         self.0.push(Box::new(then));
     }
 
