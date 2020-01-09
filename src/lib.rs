@@ -1,4 +1,5 @@
 pub struct L8r<W>(Vec<Box<dyn FnOnce(&mut W)>>);
+#[derive(Default)]
 impl<W> L8r<W> {
     pub fn new() -> Self {
         L8r(Vec::new())
