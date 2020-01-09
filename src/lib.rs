@@ -59,6 +59,17 @@ where W: ContainsHecsWorld {
     }
 }
 
+impl<W: ContainsHecsWorld> Extend<Box<dyn FnOnce(&mut W) + Send + Sync>> for L8r<W> {
+    fn extend<T: IntoIterator<Item = Box<dyn FnOnce(&mut W) + Send + Sync>>>(
+        &mut self,
+        iterator: T,
+    ) {
+        for element in iterator {
+            self.schedule(element);
+        }
+    }
+}
+
 pub trait ContainsHecsWorld {
     fn ecs(&self) -> &hecs::World;
 
