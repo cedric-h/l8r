@@ -34,9 +34,11 @@ impl<W> L8r<W> {
         }
     }
 }
+
 impl<W> L8r<W>
 where
     W: ContainsHecsWorld,
+{
     pub fn insert_one<C: hecs::Component>(&mut self, ent: hecs::Entity, component: C) {
         self.l8r(move |world| world.ecs_mut().insert_one(ent, component).unwrap())
     }
@@ -79,4 +81,3 @@ pub trait ContainsHecsWorld {
 
     fn ecs_mut(&mut self) -> &mut hecs::World;
 }
-
